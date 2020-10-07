@@ -24,17 +24,28 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget buildContent() => Column(
+  StatefulBuilder buildContent() {
+    int modeIndex = 0;
+    double sliderValue = 70.0;
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(children: [
             new Text(
-              "Patrick's Frame",
+              "Patrick's Frame 4",
               style: TextStyle(
                   fontSize: 24.0,
                   fontFamily: "Roboto",
                   fontWeight: FontWeight.bold),
-            )
+            ),
+            new IconButton(
+                icon: Icon(
+                  Icons.settings,
+                  color: Colors.red,
+                ),
+                onPressed: () {})
           ]),
           Row(children: [
             new Text(
@@ -57,11 +68,30 @@ class HomePage extends StatelessWidget {
               Expanded(
                   child: CupertinoSlidingSegmentedControl(
                 children: logoWidgets,
-                onValueChanged: (changeFromGroupValue) {},
-                groupValue: 0,
+                onValueChanged: (int newValue) {
+                  setState(() {
+                    modeIndex = newValue;
+                  });
+                },
+                groupValue: modeIndex,
               ))
             ],
-          )
+          ),
+          Row(children: <Widget>[
+            Container(
+              child: CupertinoSlider(
+                  value: sliderValue,
+                  onChanged: (newv) {
+                    setState(() {
+                      sliderValue = newv;
+                    });
+                  },
+                  min: 50.0,
+                  max: 100.0),
+            )
+          ])
         ],
       );
+    });
+  }
 }
