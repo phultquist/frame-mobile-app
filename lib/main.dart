@@ -1,27 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'settings.dart';
+import 'styles.dart';
 
 void main() {
   runApp(new MaterialApp(home: new HomePage()));
 }
 
-const buttonStyle =
-    TextStyle(fontFamily: 'Helvetica', fontWeight: FontWeight.w600);
-
-const headerStyle = TextStyle(
-    fontFamily: 'Roboto',
-    fontWeight: FontWeight.w700,
-    letterSpacing: 0.5,
-    fontSize: 18.0);
-
 class HomePage extends StatelessWidget {
   @override
-  final Map<int, Widget> logoWidgets = const <int, Widget>{
-    0: Text(
-      "Listen",
-      style: buttonStyle,
-    ),
-    1: Text("Spotify", style: buttonStyle),
+  final Map<int, Widget> modeSegments = const <int, Widget>{
+    0: Text("Listen", style: buttonStyle),
+    1: Text("Connect", style: buttonStyle),
   };
 
   Widget build(BuildContext context) {
@@ -35,6 +25,7 @@ class HomePage extends StatelessWidget {
   StatefulBuilder buildContent() {
     int modeIndex = 0;
     double sliderValue = 70.0;
+    String title = "Patrick's Frame";
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return Column(
@@ -42,18 +33,23 @@ class HomePage extends StatelessWidget {
         children: [
           Row(children: [
             new Text(
-              "Patrick's Frame",
-              style: TextStyle(
-                  fontSize: 24.0,
-                  fontFamily: "Roboto",
-                  fontWeight: FontWeight.bold),
+              title,
+              style: titleStyle,
             ),
-            new IconButton(
+            Spacer(),
+            IconButton(
                 icon: Icon(
                   Icons.settings,
-                  color: Colors.red,
+                  color: Colors.black,
                 ),
-                onPressed: () {})
+                onPressed: () async {
+                  final result = await Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SettingsPage()));
+                  setState(() {
+                    title = result;
+                  });
+                  print(result);
+                })
           ]),
           Row(children: [
             new Text(
@@ -75,7 +71,7 @@ class HomePage extends StatelessWidget {
             children: <Widget>[
               Expanded(
                   child: CupertinoSlidingSegmentedControl(
-                children: logoWidgets,
+                children: modeSegments,
                 onValueChanged: (int newValue) {
                   setState(() {
                     modeIndex = newValue;
@@ -83,6 +79,15 @@ class HomePage extends StatelessWidget {
                 },
                 groupValue: modeIndex,
               ))
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Text(
+                "QUICK SETTINGS",
+                style: TextStyle(
+                    color: Color(0xff9d9d9d), fontWeight: FontWeight.w700),
+              )
             ],
           ),
           Row(
@@ -126,4 +131,8 @@ class HomePage extends StatelessWidget {
       );
     });
   }
+}
+
+_navigateToSettingsPage(BuildContext context) async {
+  // final result =
 }
