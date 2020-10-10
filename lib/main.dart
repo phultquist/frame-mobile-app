@@ -5,15 +5,23 @@ void main() {
   runApp(new MaterialApp(home: new HomePage()));
 }
 
+const buttonStyle =
+    TextStyle(fontFamily: 'Helvetica', fontWeight: FontWeight.w600);
+
+const headerStyle = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.5,
+    fontSize: 18.0);
+
 class HomePage extends StatelessWidget {
   @override
   final Map<int, Widget> logoWidgets = const <int, Widget>{
     0: Text(
       "Listen",
-      style: TextStyle(fontFamily: 'Helvetica', fontWeight: FontWeight.w600),
+      style: buttonStyle,
     ),
-    1: Text("Spotify",
-        style: TextStyle(fontFamily: 'Helvetica', fontWeight: FontWeight.w600)),
+    1: Text("Spotify", style: buttonStyle),
   };
 
   Widget build(BuildContext context) {
@@ -34,7 +42,7 @@ class HomePage extends StatelessWidget {
         children: [
           Row(children: [
             new Text(
-              "Patrick's Frame 4",
+              "Patrick's Frame",
               style: TextStyle(
                   fontSize: 24.0,
                   fontFamily: "Roboto",
@@ -77,8 +85,16 @@ class HomePage extends StatelessWidget {
               ))
             ],
           ),
+          Row(
+            children: <Widget>[
+              Text(
+                "Brightness",
+                style: headerStyle,
+              )
+            ],
+          ),
           Row(children: <Widget>[
-            Container(
+            Expanded(
               child: CupertinoSlider(
                   value: sliderValue,
                   onChanged: (newv) {
@@ -89,7 +105,23 @@ class HomePage extends StatelessWidget {
                   min: 50.0,
                   max: 100.0),
             )
-          ])
+          ]),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: FlatButton(
+                    color: Color(0xffe5e5e7),
+                    splashColor: Colors.transparent,
+                    onPressed: () => {},
+                    child: Text(
+                      "Sleep Now",
+                      style: buttonStyle,
+                    ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6.0))),
+              )
+            ],
+          )
         ],
       );
     });
