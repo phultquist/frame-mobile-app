@@ -23,6 +23,9 @@ class HomePage extends StatelessWidget {
   }
 
   StatefulBuilder buildContent() {
+    const imageUrl =
+        "https://i.scdn.co/image/67407947517062a649d86e06c7fa17670f7f09eb";
+
     int modeIndex = 0;
     double sliderValue = 70.0;
     String title = "Patrick's Frame";
@@ -55,36 +58,36 @@ class HomePage extends StatelessWidget {
                   print(result);
                 })
           ]),
-          Row(children: [
-            new Text(
-              "Abbey Road",
-              style: TextStyle(
-                  fontSize: 24.0,
-                  fontFamily: "Roboto",
-                  fontWeight: FontWeight.w500),
-            )
-          ]),
-          Row(children: [
-            new Text(
-              "The Beatles — From Spotify",
-              textAlign: TextAlign.left,
-            )
-          ]),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Expanded(
-                  child: CupertinoSlidingSegmentedControl(
-                children: modeSegments,
-                onValueChanged: (int newValue) {
-                  setState(() {
-                    modeIndex = newValue;
-                  });
-                },
-                groupValue: modeIndex,
-              ))
-            ],
-          ),
+          Container(
+              margin: EdgeInsets.only(left: 20.0, right: 20.0),
+              child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                        child: Container(
+                            padding: EdgeInsets.all(5.0),
+                            margin: EdgeInsets.all(4.0),
+                            // height: 100,
+                            child: Image.network(
+                              imageUrl,
+                              scale: 0.10,
+                            ))),
+                    Row(children: [
+                      new Text(
+                        "Abbey Road",
+                        style: TextStyle(
+                            fontSize: 24.0,
+                            fontFamily: "Roboto",
+                            fontWeight: FontWeight.w500),
+                      )
+                    ]),
+                    Row(children: [
+                      new Text(
+                        "The Beatles — From Spotify",
+                        textAlign: TextAlign.left,
+                      )
+                    ])
+                  ])),
           Row(
             children: <Widget>[
               Text(
@@ -117,6 +120,29 @@ class HomePage extends StatelessWidget {
           ]),
           Row(
             children: <Widget>[
+              Text(
+                "Mode",
+                style: headerStyle,
+              )
+            ],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Expanded(
+                  child: CupertinoSlidingSegmentedControl(
+                children: modeSegments,
+                onValueChanged: (int newValue) {
+                  setState(() {
+                    modeIndex = newValue;
+                  });
+                },
+                groupValue: modeIndex,
+              ))
+            ],
+          ),
+          Row(
+            children: <Widget>[
               Expanded(
                 child: FlatButton(
                     color: Color(0xffe5e5e7),
@@ -136,3 +162,7 @@ class HomePage extends StatelessWidget {
     });
   }
 }
+
+// class AlbumCover extends StatelessWidget {
+//   Widget build(BuildContext buildContext) {}
+// }

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'styles.dart';
 import 'nightshift.dart';
-import 'colorpicker.dart';
-// import 'nightshift.dart';
+import 'components.dart';
+import 'autosleep.dart';
+import 'clock.dart';
 
 FocusNode firstFocusNode = new FocusNode();
 
@@ -13,10 +14,10 @@ final Map<int, Widget> abSegments = const <int, Widget>{
 };
 
 final Map<int, Widget> animationSegments = const <int, Widget>{
-  0: Text("Off", style: buttonStyle),
-  1: Text("Slow", style: buttonStyle),
-  2: Text("Normal", style: buttonStyle),
-  3: Text("Fast", style: buttonStyle),
+  0: Text("Slow", style: buttonStyle),
+  1: Text("Normal", style: buttonStyle),
+  2: Text("Fast", style: buttonStyle),
+  3: Text("Off", style: buttonStyle),
 };
 
 final Map<int, Widget> pauseSegments = const <int, Widget>{
@@ -128,12 +129,12 @@ StatefulBuilder buildContent(frameName) {
           ],
         ),
         pageNavigationButton("Night Shift", new NightShiftPage()),
-        pageNavigationButton("Autosleep", new NightShiftPage()),
-        pageNavigationButton("Clock", new ColorPickerPage()),
+        pageNavigationButton("Autosleep", new AutosleepPage()),
+        pageNavigationButton("Clock", new ClockPage()),
         Row(
           children: <Widget>[
             Text(
-              "Show Paused Icon",
+              "Paused Icon",
               style: headerStyle,
             ),
           ],
@@ -187,44 +188,5 @@ StatefulBuilder buildContent(frameName) {
         )
       ],
     ));
-  });
-}
-
-StatefulBuilder pageNavigationButton(String text, newPage) {
-  double _opacityValue = 1.0;
-  return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-    return GestureDetector(
-      child: Opacity(
-          opacity: _opacityValue,
-          child: Container(
-              margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    text,
-                    style: headerStyle,
-                  ),
-                  Spacer(),
-                  Icon(Icons.chevron_right)
-                ],
-              ))),
-      onTap: () {
-        print('$text row tapped');
-        // NightShiftPage
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => newPage));
-      },
-      onTapDown: (details) {
-        setState(() {
-          _opacityValue = 0.7;
-        });
-      },
-      onTapUp: (details) {
-        setState(() {
-          _opacityValue = 1.0;
-        });
-      },
-      behavior: HitTestBehavior.translucent,
-    );
   });
 }

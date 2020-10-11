@@ -10,10 +10,7 @@ class ColorPickerPage extends StatelessWidget {
       child: new Container(
           child: buildContent(),
           margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 50)),
-      onTap: () {
-        print('tapped!');
-        FocusScope.of(buildContext).requestFocus(new FocusNode());
-      },
+      onTap: () {},
       behavior: HitTestBehavior.translucent,
     ));
   }
