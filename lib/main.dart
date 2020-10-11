@@ -43,8 +43,12 @@ class HomePage extends StatelessWidget {
                   color: Colors.black,
                 ),
                 onPressed: () async {
-                  final result = await Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SettingsPage()));
+                  final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SettingsPage(
+                                frameName: title,
+                              )));
                   setState(() {
                     title = result;
                   });
@@ -131,8 +135,4 @@ class HomePage extends StatelessWidget {
       );
     });
   }
-}
-
-_navigateToSettingsPage(BuildContext context) async {
-  // final result =
 }
