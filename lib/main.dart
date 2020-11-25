@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'settings.dart';
 import 'styles.dart';
+import 'websocket.dart';
+import 'components.dart';
 
 void main() {
   runApp(new MaterialApp(home: new HomePage()));
@@ -23,8 +25,10 @@ class HomePage extends StatelessWidget {
   }
 
   StatefulBuilder buildContent() {
+    // const imageUrl =
+    //     "https://i.scdn.co/image/d3acaeb069f37d8e257221f7224c813c5fa6024e";
     const imageUrl =
-        "https://i.scdn.co/image/67407947517062a649d86e06c7fa17670f7f09eb";
+        "https://storage.googleapis.com/file-in.appspot.com/files/AhXcb_9i_c.jpg";
 
     int modeIndex = 0;
     double sliderValue = 70.0;
@@ -156,7 +160,8 @@ class HomePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(6.0))),
               )
             ],
-          )
+          ),
+          // pageNavigationButton("Websocket", MyApp()),
         ],
       );
     });
