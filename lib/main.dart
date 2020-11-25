@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'settings.dart';
 import 'styles.dart';
-import 'websocket.dart';
 import 'components.dart';
+import 'dart:convert';
+import 'globals.dart' as globals;
 
+final double brightnessMin = 50.0;
+final double brightnessMax = 100.0;
 void main() {
   runApp(new MaterialApp(home: new HomePage()));
 }
 
 class HomePage extends StatelessWidget {
+  // final WebSocketChannel channel =
+  //     IOWebSocketChannel.connect('ws://192.168.68.102:8000');
+
   @override
   final Map<int, Widget> modeSegments = const <int, Widget>{
     0: Text("Listen", style: buttonStyle),
@@ -18,20 +24,30 @@ class HomePage extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: new Container(
-          child: buildContent(),
-          margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 50)),
-    );
+        body: StreamBuilder(
+            stream: globals.channel.stream,
+            builder: (context, snapshot) {
+              print(snapshot.data);
+              // Map<String, dynamic> data =
+              globals.data = jsonDecode(snapshot.data);
+              return new Container(
+                  child: buildContent(globals.data),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 50));
+            }));
   }
 
-  StatefulBuilder buildContent() {
+  StatefulBuilder buildContent(data) {
     // const imageUrl =
     //     "https://i.scdn.co/image/d3acaeb069f37d8e257221f7224c813c5fa6024e";
     const imageUrl =
         "https://storage.googleapis.com/file-in.appspot.com/files/AhXcb_9i_c.jpg";
 
     int modeIndex = 0;
-    double sliderValue = 70.0;
+    double sliderValue = double.parse(data["brightness"]);
+    if (sliderValue <= brightnessMin || sliderValue > brightnessMax) {
+      sliderValue = brightnessMin;
+    }
     String title = "Patrick's Frame";
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
@@ -67,15 +83,15 @@ class HomePage extends StatelessWidget {
               child: Column(
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                        child: Container(
-                            padding: EdgeInsets.all(5.0),
-                            margin: EdgeInsets.all(4.0),
-                            // height: 100,
-                            child: Image.network(
-                              imageUrl,
-                              scale: 0.10,
-                            ))),
+                    // Container(
+                    //     child: Container(
+                    //         padding: EdgeInsets.all(5.0),
+                    //         margin: EdgeInsets.all(4.0),
+                    //         // height: 100,
+                    //         child: Image.network(
+                    //           imageUrl,
+                    //           scale: 0.10,
+                    //         ))),
                     Row(children: [
                       new Text(
                         "Abbey Road",
@@ -117,9 +133,12 @@ class HomePage extends StatelessWidget {
                     setState(() {
                       sliderValue = newv;
                     });
+                    globals.updateSettings(
+                        "brightness", newv.round().toString());
+                    print(newv);
                   },
-                  min: 50.0,
-                  max: 100.0),
+                  min: brightnessMin,
+                  max: brightnessMax),
             )
           ]),
           Row(
@@ -161,7 +180,6 @@ class HomePage extends StatelessWidget {
               )
             ],
           ),
-          // pageNavigationButton("Websocket", MyApp()),
         ],
       );
     });

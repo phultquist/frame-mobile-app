@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'components.dart';
 import 'styles.dart';
 import 'colorpicker.dart';
+import 'globals.dart' as globals;
 
 final Map<int, Widget> clockModeSegments = const <int, Widget>{
   0: Text("Off", style: buttonStyle),
@@ -49,6 +50,11 @@ StatefulBuilder buildContent() {
                   setState(() {
                     clockModeIndex = newValue;
                   });
+                  if (newValue == 0) {
+                    globals.updateSettings("showClock", "false");
+                  } else {
+                    globals.updateSettings("showClock", "true");
+                  }
                 },
                 groupValue: clockModeIndex,
               ))
@@ -72,6 +78,11 @@ StatefulBuilder buildContent() {
                   setState(() {
                     clockStyleIndex = newValue;
                   });
+                  if (newValue == 0) {
+                    globals.updateSettings("clock", "classic");
+                  } else {
+                    globals.updateSettings("clock", "modern");
+                  }
                 },
                 groupValue: clockStyleIndex,
               ))
