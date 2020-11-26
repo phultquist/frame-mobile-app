@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'components.dart';
+import 'globals.dart' as globals;
 
 const int colorsPerRow = 4;
 
@@ -90,6 +91,14 @@ StatefulBuilder buildColorPicker() {
             setState(() {
               selectedIndex = i + j;
             });
+            Color selectedColor = colors[selectedIndex];
+            String rgbConverted = selectedColor.red.toString() +
+                "," +
+                selectedColor.green.toString() +
+                "," +
+                selectedColor.blue.toString();
+            globals.updateSettings("clockColor", rgbConverted);
+            print(rgbConverted);
           },
         ));
       }

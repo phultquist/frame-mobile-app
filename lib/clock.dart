@@ -54,6 +54,11 @@ StatefulBuilder buildContent() {
                     globals.updateSettings("showClock", "false");
                   } else {
                     globals.updateSettings("showClock", "true");
+                    if (newValue == 1) {
+                      globals.updateSettings("clockTiming", "12");
+                    } else {
+                      globals.updateSettings("clockTiming", "24");
+                    }
                   }
                 },
                 groupValue: clockModeIndex,

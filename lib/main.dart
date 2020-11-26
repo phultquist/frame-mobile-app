@@ -27,8 +27,6 @@ class HomePage extends StatelessWidget {
         body: StreamBuilder(
             stream: globals.channel.stream,
             builder: (context, snapshot) {
-              print(snapshot.data);
-              // Map<String, dynamic> data =
               globals.data = jsonDecode(snapshot.data);
               return new Container(
                   child: buildContent(globals.data),
