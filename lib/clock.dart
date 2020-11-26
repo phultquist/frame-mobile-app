@@ -5,6 +5,8 @@ import 'styles.dart';
 import 'colorpicker.dart';
 import 'globals.dart' as globals;
 
+FocusNode firstFocusNode = new FocusNode();
+
 final Map<int, Widget> clockModeSegments = const <int, Widget>{
   0: Text("Off", style: buttonStyle),
   1: Text("12 Hour", style: buttonStyle),
@@ -34,7 +36,16 @@ class ClockPage extends StatelessWidget {
 
 StatefulBuilder buildContent() {
   int clockModeIndex = 0;
-  int clockStyleIndex = 0;
+  if (globals.data["showClock"] != false) {
+    if (globals.data["clockTiming"] == "12") {
+      clockModeIndex = 1;
+    } else {
+      clockModeIndex = 2;
+    }
+  }
+
+  int clockStyleIndex = globals.data["clock"] == "classic" ? 0 : 1;
+
   return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
     return new Container(
       child: Column(

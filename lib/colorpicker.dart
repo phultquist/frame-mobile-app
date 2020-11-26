@@ -34,20 +34,39 @@ StatefulBuilder buildContent() {
 
 StatefulBuilder buildColorPicker() {
   List<Color> colors = [
-    Color(0xffff0000),
-    Color(0xff00ff00),
-    Color(0xff0000ff),
+    Color(0xffef0e0e),
+    Color(0xff0cf5d9),
+    Color(0xfffde400),
+    Color(0xff6804e7),
+    Color(0xffff9900),
     Color(0xff000000),
-    Color(0xffffff00),
-    Color(0xff00ffff),
-    Color(0xff3f15ff),
-    Color(0xff00e312),
+    Color(0xffe500ea),
     Color(0xffffffff),
-    Color(0xff0f97f3),
-    Color(0xffe59999),
-    Color(0xffa4a5a6)
+    Color(0xff1dcc00),
+    Color(0xff364886),
+    Color(0xff1677e9),
+    Color(0xffaae6ff),
+    Color(0xffffb8b8),
+    Color(0xffb1ff9d),
+    Color(0xff959595),
+    Color(0xffc29cff),
+    Color(0xff1100cf),
+    Color(0xffe8c300),
+    Color(0xfffebdff),
+    Color(0xff287e00)
   ];
-  int selectedIndex = 1;
+
+  int selectedIndex = 0;
+  dynamic rgb = globals.data["clockColor"].split(",");
+  for (int i = 0; i < colors.length; i++) {
+    Color c = colors[i];
+    print(c.red + c.green + c.blue);
+    if (c.red == int.parse(rgb[0]) &&
+        c.green == int.parse(rgb[1]) &&
+        c.blue == int.parse(rgb[2])) {
+      selectedIndex = i;
+    }
+  }
 
   return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
     List<Row> rows = [];
@@ -76,8 +95,8 @@ StatefulBuilder buildColorPicker() {
                 ),
                 alignment: Alignment.center,
               ),
-              width: 50.0,
-              height: 50.0,
+              width: 55.0,
+              height: 55.0,
               margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
               padding: const EdgeInsets.all(5.0),
               // color: Colors.grey.shade300
@@ -98,12 +117,11 @@ StatefulBuilder buildColorPicker() {
                 "," +
                 selectedColor.blue.toString();
             globals.updateSettings("clockColor", rgbConverted);
-            print(rgbConverted);
           },
         ));
       }
-      rows.add(
-          Row(children: row, mainAxisAlignment: MainAxisAlignment.spaceAround));
+      rows.add(Row(
+          children: row, mainAxisAlignment: MainAxisAlignment.spaceBetween));
     }
     return Column(
       children: rows,

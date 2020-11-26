@@ -5,6 +5,7 @@ import 'nightshift.dart';
 import 'components.dart';
 import 'autosleep.dart';
 import 'clock.dart';
+import 'globals.dart' as globals;
 
 FocusNode firstFocusNode = new FocusNode();
 
@@ -14,9 +15,9 @@ final Map<int, Widget> abSegments = const <int, Widget>{
 };
 
 final Map<int, Widget> animationSegments = const <int, Widget>{
-  0: Text("Slow", style: buttonStyle),
+  0: Text("Fast", style: buttonStyle),
   1: Text("Normal", style: buttonStyle),
-  2: Text("Fast", style: buttonStyle),
+  2: Text("Slow", style: buttonStyle),
   3: Text("Off", style: buttonStyle),
 };
 
@@ -48,7 +49,19 @@ class SettingsPage extends StatelessWidget {
 
 StatefulBuilder buildContent(frameName) {
   int abIndex = 0;
-  int animationIndex = 0;
+  int animationIndex = 3;
+
+  int currentAnimation = int.parse(globals.data["animation"]);
+  if (currentAnimation == 1) {
+    // do nothing
+  } else if (currentAnimation <= 6) {
+    animationIndex = 0;
+  } else if (currentAnimation <= 12) {
+    animationIndex = 1;
+  } else {
+    animationIndex = 2;
+  }
+
   int pauseIndex = 0;
   final frameNameController = TextEditingController(text: frameName);
 
@@ -123,6 +136,15 @@ StatefulBuilder buildContent(frameName) {
                 setState(() {
                   animationIndex = newValue;
                 });
+                if (newValue == 0) {
+                  globals.updateSettings("animation", "6");
+                } else if (newValue == 1) {
+                  globals.updateSettings("animation", "12");
+                } else if (newValue == 2) {
+                  globals.updateSettings("animation", "18");
+                } else {
+                  globals.updateSettings("animation", "1");
+                }
               },
               groupValue: animationIndex,
             ))
@@ -131,29 +153,30 @@ StatefulBuilder buildContent(frameName) {
         pageNavigationButton("Night Shift", new NightShiftPage()),
         pageNavigationButton("Autosleep", new AutosleepPage()),
         pageNavigationButton("Clock", new ClockPage()),
-        Row(
-          children: <Widget>[
-            Text(
-              "Paused Icon",
-              style: headerStyle,
-            ),
-          ],
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Expanded(
-                child: CupertinoSlidingSegmentedControl(
-              children: pauseSegments,
-              onValueChanged: (int newValue) {
-                setState(() {
-                  pauseIndex = newValue;
-                });
-              },
-              groupValue: pauseIndex,
-            ))
-          ],
-        ),
+        // Row(
+        //   children: <Widget>[
+        //     Text(
+        //       "Paused Icon",
+        //       style: headerStyle,
+        //     ),
+        //   ],
+        // ),
+        // Row(
+        //   mainAxisSize: MainAxisSize.max,
+        //   children: <Widget>[
+        //     Expanded(
+        //         child: CupertinoSlidingSegmentedControl(
+        //       children: pauseSegments,
+        //       onValueChanged: (int newValue) {
+        //         setState(() {
+        //           pauseIndex = newValue;
+        //         });
+        //       },
+        //       groupValue: pauseIndex,
+        //     ))
+        //   ],
+        // ),
+        Spacer(),
         Row(
           children: <Widget>[
             Expanded(

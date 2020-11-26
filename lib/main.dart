@@ -1,3 +1,4 @@
+// import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'settings.dart';
@@ -6,7 +7,7 @@ import 'components.dart';
 import 'dart:convert';
 import 'globals.dart' as globals;
 
-final double brightnessMin = 50.0;
+final double brightnessMin = 0.0;
 final double brightnessMax = 100.0;
 void main() {
   runApp(new MaterialApp(home: new HomePage()));
@@ -38,9 +39,8 @@ class HomePage extends StatelessWidget {
   StatefulBuilder buildContent(data) {
     // const imageUrl =
     //     "https://i.scdn.co/image/d3acaeb069f37d8e257221f7224c813c5fa6024e";
-    const imageUrl =
-        "https://storage.googleapis.com/file-in.appspot.com/files/AhXcb_9i_c.jpg";
 
+    String imageUrl = data["imageUrl"];
     int modeIndex = 0;
     double sliderValue = double.parse(data["brightness"]);
     if (sliderValue <= brightnessMin || sliderValue > brightnessMax) {
@@ -56,6 +56,7 @@ class HomePage extends StatelessWidget {
             new Text(
               title,
               style: titleStyle,
+              overflow: TextOverflow.ellipsis,
             ),
             Spacer(),
             IconButton(
@@ -77,107 +78,135 @@ class HomePage extends StatelessWidget {
                 })
           ]),
           Container(
-              margin: EdgeInsets.only(left: 20.0, right: 20.0),
+              margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
               child: Column(
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Container(
-                    //     child: Container(
-                    //         padding: EdgeInsets.all(5.0),
-                    //         margin: EdgeInsets.all(4.0),
-                    //         // height: 100,
-                    //         child: Image.network(
-                    //           imageUrl,
-                    //           scale: 0.10,
-                    //         ))),
+                    Container(
+                        child: Container(
+                            padding: EdgeInsets.all(5.0),
+                            margin: EdgeInsets.all(4.0),
+                            decoration: new BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.4),
+                                  spreadRadius: 1,
+                                  blurRadius: 15,
+                                  offset: Offset(
+                                      0, 0), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: Image.network(
+                                  imageUrl,
+                                  scale: 0.10,
+                                )))),
                     Row(children: [
-                      new Text(
-                        "Abbey Road",
+                      Expanded(
+                          child: new Text(
+                        data["albumName"] ?? "Not Playing",
+                        overflow: TextOverflow.fade,
                         style: TextStyle(
                             fontSize: 24.0,
                             fontFamily: "Roboto",
                             fontWeight: FontWeight.w500),
-                      )
+                      ))
                     ]),
                     Row(children: [
-                      new Text(
-                        "The Beatles — From Spotify",
-                        textAlign: TextAlign.left,
-                      )
+                      Container(
+                          margin: EdgeInsets.only(top: 5.0),
+                          child: new Text(
+                            data["artistName"] ?? " ",
+                            textAlign: TextAlign.left,
+                            overflow: TextOverflow.fade,
+                          ))
                     ])
                   ])),
-          Row(
-            children: <Widget>[
-              Text(
-                "QUICK SETTINGS",
-                style: TextStyle(
-                    color: Color(0xff9d9d9d), fontWeight: FontWeight.w700),
-              )
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Text(
-                "Brightness",
-                style: headerStyle,
-              )
-            ],
-          ),
-          Row(children: <Widget>[
-            Expanded(
-              child: CupertinoSlider(
-                  value: sliderValue,
-                  onChanged: (newv) {
-                    setState(() {
-                      sliderValue = newv;
-                    });
-                    globals.updateSettings(
-                        "brightness", newv.round().toString());
-                    print(newv);
-                  },
-                  min: brightnessMin,
-                  max: brightnessMax),
-            )
-          ]),
-          Row(
-            children: <Widget>[
-              Text(
-                "Mode",
-                style: headerStyle,
-              )
-            ],
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Expanded(
-                  child: CupertinoSlidingSegmentedControl(
-                children: modeSegments,
-                onValueChanged: (int newValue) {
-                  setState(() {
-                    modeIndex = newValue;
-                  });
-                },
-                groupValue: modeIndex,
-              ))
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: FlatButton(
-                    color: Color(0xffe5e5e7),
-                    splashColor: Colors.transparent,
-                    onPressed: () => {},
-                    child: Text(
-                      "Sleep Now",
-                      style: buttonStyle,
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6.0))),
-              )
-            ],
-          ),
+          Expanded(
+              child: Container(
+                  margin: EdgeInsets.only(top: 30),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            "QUICK SETTINGS",
+                            style: TextStyle(
+                                color: Color(0xff9d9d9d),
+                                fontWeight: FontWeight.w700),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            "Brightness",
+                            style: headerStyle,
+                          )
+                        ],
+                      ),
+                      Row(children: <Widget>[
+                        Expanded(
+                          child: CupertinoSlider(
+                              value: sliderValue,
+                              onChanged: (newv) {
+                                setState(() {
+                                  sliderValue = newv;
+                                });
+                                globals.updateSettings(
+                                    "brightness", newv.round().toString());
+                              },
+                              min: brightnessMin,
+                              max: brightnessMax),
+                        )
+                      ]),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            "Mode",
+                            style: headerStyle,
+                          )
+                        ],
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(bottom: 25),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Expanded(
+                                  child: CupertinoSlidingSegmentedControl(
+                                children: modeSegments,
+                                onValueChanged: (int newValue) {
+                                  setState(() {
+                                    modeIndex = newValue;
+                                  });
+                                },
+                                groupValue: modeIndex,
+                              ))
+                            ],
+                          )),
+                      // Spacer(),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: FlatButton(
+                                color: Color(0xffe5e5e7),
+                                splashColor: Colors.transparent,
+                                onPressed: () => {},
+                                child: Text(
+                                  "Sleep Now",
+                                  style: buttonStyle,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6.0))),
+                          )
+                        ],
+                      ),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  ))),
         ],
       );
     });
