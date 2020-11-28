@@ -31,7 +31,7 @@ StatefulBuilder pageNavigationButton(String text, newPage) {
       child: Opacity(
           opacity: _opacityValue,
           child: Container(
-              margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+              margin: EdgeInsets.only(top: 12.0, bottom: 12.0),
               child: Row(
                 children: <Widget>[
                   Text(

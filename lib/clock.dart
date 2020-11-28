@@ -55,33 +55,37 @@ StatefulBuilder buildContent() {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Expanded(
-                  child: CupertinoSlidingSegmentedControl(
-                children: clockModeSegments,
-                onValueChanged: (int newValue) {
-                  setState(() {
-                    clockModeIndex = newValue;
-                  });
-                  if (newValue == 0) {
-                    globals.updateSettings("showClock", "false");
-                  } else {
-                    globals.updateSettings("showClock", "true");
-                    if (newValue == 1) {
-                      globals.updateSettings("clockTiming", "12");
-                    } else {
-                      globals.updateSettings("clockTiming", "24");
-                    }
-                  }
-                },
-                groupValue: clockModeIndex,
-              ))
+                  child: Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: CupertinoSlidingSegmentedControl(
+                        children: clockModeSegments,
+                        onValueChanged: (int newValue) {
+                          setState(() {
+                            clockModeIndex = newValue;
+                          });
+                          if (newValue == 0) {
+                            globals.updateSettings("showClock", "false");
+                          } else {
+                            globals.updateSettings("showClock", "true");
+                            if (newValue == 1) {
+                              globals.updateSettings("clockTiming", "12");
+                            } else {
+                              globals.updateSettings("clockTiming", "24");
+                            }
+                          }
+                        },
+                        groupValue: clockModeIndex,
+                      )))
             ],
           ),
           Row(
             children: <Widget>[
-              Text(
-                "Style",
-                style: headerStyle,
-              )
+              Container(
+                  margin: EdgeInsets.only(top: 5, bottom: 10),
+                  child: Text(
+                    "Style",
+                    style: headerStyle,
+                  ))
             ],
           ),
           Row(

@@ -104,53 +104,59 @@ StatefulBuilder buildContent(frameName) {
                 }),
           ],
         ),
-        Row(
-          children: <Widget>[Text("Autobrightness", style: headerStyle)],
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Expanded(
-                child: CupertinoSlidingSegmentedControl(
-              children: abSegments,
-              onValueChanged: (int newValue) {
-                setState(() {
-                  abIndex = newValue;
-                });
-                globals.updateSettings(
-                    "autobrightness", newValue == 1 ? "false" : "true");
-              },
-              groupValue: abIndex,
-            ))
-          ],
-        ),
+        Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Row(
+              children: <Widget>[Text("Autobrightness", style: headerStyle)],
+            )),
+        Container(
+            margin: EdgeInsets.only(top: 10, bottom: 20),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Expanded(
+                    child: CupertinoSlidingSegmentedControl(
+                  children: abSegments,
+                  onValueChanged: (int newValue) {
+                    setState(() {
+                      abIndex = newValue;
+                    });
+                    globals.updateSettings(
+                        "autobrightness", newValue == 1 ? "false" : "true");
+                  },
+                  groupValue: abIndex,
+                ))
+              ],
+            )),
         Row(
           children: <Widget>[Text("Transition Speed", style: headerStyle)],
         ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Expanded(
-                child: CupertinoSlidingSegmentedControl(
-              children: animationSegments,
-              onValueChanged: (int newValue) {
-                setState(() {
-                  animationIndex = newValue;
-                });
-                if (newValue == 0) {
-                  globals.updateSettings("animation", "6");
-                } else if (newValue == 1) {
-                  globals.updateSettings("animation", "12");
-                } else if (newValue == 2) {
-                  globals.updateSettings("animation", "18");
-                } else {
-                  globals.updateSettings("animation", "1");
-                }
-              },
-              groupValue: animationIndex,
-            ))
-          ],
-        ),
+        Container(
+            margin: EdgeInsets.only(top: 10, bottom: 20),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Expanded(
+                    child: CupertinoSlidingSegmentedControl(
+                  children: animationSegments,
+                  onValueChanged: (int newValue) {
+                    setState(() {
+                      animationIndex = newValue;
+                    });
+                    if (newValue == 0) {
+                      globals.updateSettings("animation", "6");
+                    } else if (newValue == 1) {
+                      globals.updateSettings("animation", "12");
+                    } else if (newValue == 2) {
+                      globals.updateSettings("animation", "18");
+                    } else {
+                      globals.updateSettings("animation", "1");
+                    }
+                  },
+                  groupValue: animationIndex,
+                ))
+              ],
+            )),
         pageNavigationButton("Night Shift", new NightShiftPage()),
         // pageNavigationButton("Autosleep", new AutosleepPage()),
         pageNavigationButton("Clock", new ClockPage()),
