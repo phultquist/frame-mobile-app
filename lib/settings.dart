@@ -48,7 +48,7 @@ class SettingsPage extends StatelessWidget {
 }
 
 StatefulBuilder buildContent(frameName) {
-  int abIndex = 0;
+  int abIndex = globals.data["autobrightness"] == "true" ? 0 : 1;
   int animationIndex = 3;
 
   int currentAnimation = int.parse(globals.data["animation"]);
@@ -83,7 +83,6 @@ StatefulBuilder buildContent(frameName) {
                 ),
                 onPressed: () {
                   Navigator.pop(context, frameNameController.text);
-
                   // Also save all settings
                 }),
             Expanded(
@@ -118,13 +117,15 @@ StatefulBuilder buildContent(frameName) {
                 setState(() {
                   abIndex = newValue;
                 });
+                globals.updateSettings(
+                    "autobrightness", newValue == 1 ? "false" : "true");
               },
               groupValue: abIndex,
             ))
           ],
         ),
         Row(
-          children: <Widget>[Text("Animation Speed", style: headerStyle)],
+          children: <Widget>[Text("Transition Speed", style: headerStyle)],
         ),
         Row(
           mainAxisSize: MainAxisSize.max,
@@ -151,7 +152,7 @@ StatefulBuilder buildContent(frameName) {
           ],
         ),
         pageNavigationButton("Night Shift", new NightShiftPage()),
-        pageNavigationButton("Autosleep", new AutosleepPage()),
+        // pageNavigationButton("Autosleep", new AutosleepPage()),
         pageNavigationButton("Clock", new ClockPage()),
         // Row(
         //   children: <Widget>[

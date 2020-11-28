@@ -17,22 +17,32 @@ class HomePage extends StatelessWidget {
   // final WebSocketChannel channel =
   //     IOWebSocketChannel.connect('ws://192.168.68.102:8000');
 
-  @override
+  // @override
   final Map<int, Widget> modeSegments = const <int, Widget>{
     0: Text("Listen", style: buttonStyle),
     1: Text("Connect", style: buttonStyle),
   };
 
   Widget build(BuildContext context) {
+    // print(globals.channel.);
+    print('test1');
     return new Scaffold(
         body: StreamBuilder(
             stream: globals.channel.stream,
             builder: (context, snapshot) {
-              globals.data = jsonDecode(snapshot.data);
-              return new Container(
-                  child: buildContent(globals.data),
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 50));
+              if (snapshot.hasData) {
+                globals.data = jsonDecode(snapshot.data);
+                print(snapshot.hasData);
+                return new Container(
+                    child: buildContent(globals.data),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 40));
+              } else {
+                return Container(
+                  child: Text('Could Not Connect :('),
+                  alignment: Alignment.center,
+                );
+              }
             }));
   }
 
@@ -42,6 +52,9 @@ class HomePage extends StatelessWidget {
 
     String imageUrl = data["imageUrl"];
     int modeIndex = 0;
+    if (data["mode"] == "spotify") {
+      modeIndex = 1;
+    }
     double sliderValue = double.parse(data["brightness"]);
     if (sliderValue <= brightnessMin || sliderValue > brightnessMax) {
       sliderValue = brightnessMin;
@@ -124,89 +137,150 @@ class HomePage extends StatelessWidget {
                           ))
                     ])
                   ])),
+          // Spacer(),
           Expanded(
               child: Container(
-                  margin: EdgeInsets.only(top: 30),
+                  // margin: EdgeInsets.only(top: 30),
                   child: Column(
-                    children: [
-                      Row(
-                        children: <Widget>[
-                          Text(
-                            "QUICK SETTINGS",
-                            style: TextStyle(
-                                color: Color(0xff9d9d9d),
-                                fontWeight: FontWeight.w700),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Text(
-                            "Brightness",
-                            style: headerStyle,
-                          )
-                        ],
-                      ),
-                      Row(children: <Widget>[
+            children: [
+              Row(
+                children: <Widget>[
+                  Text(
+                    "QUICK SETTINGS",
+                    style: TextStyle(
+                        color: Color(0xff9d9d9d), fontWeight: FontWeight.w700),
+                  )
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Text(
+                    "Brightness",
+                    style: headerStyle,
+                  )
+                ],
+              ),
+              Row(children: <Widget>[
+                Expanded(
+                  child: CupertinoSlider(
+                      value: sliderValue,
+                      onChanged: (newv) {
+                        setState(() {
+                          sliderValue = newv;
+                        });
+                        globals.updateSettings(
+                            "brightness", newv.round().toString());
+                      },
+                      min: brightnessMin,
+                      max: brightnessMax),
+                )
+              ]),
+              Row(
+                children: <Widget>[
+                  Text(
+                    "Mode",
+                    style: headerStyle,
+                  )
+                ],
+              ),
+              Container(
+                  // margin: EdgeInsets.only(bottom: 25),
+                  child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Expanded(
+                      child: CupertinoSlidingSegmentedControl(
+                    children: modeSegments,
+                    onValueChanged: (int newValue) {
+                      setState(() {
+                        modeIndex = newValue;
+                      });
+                      if (newValue == 0) {
+                        globals.updateSettings("mode", "listen");
+                      }
+                      if (newValue == 1) {
+                        globals.updateSettings("mode", "spotify");
+                      }
+                    },
+                    groupValue: modeIndex,
+                  ))
+                ],
+              )),
+              Spacer(),
+              (() {
+                if (data["mode"] == "listen") {
+                  return Column(children: [
+                    Row(
+                      children: <Widget>[
                         Expanded(
-                          child: CupertinoSlider(
-                              value: sliderValue,
-                              onChanged: (newv) {
-                                setState(() {
-                                  sliderValue = newv;
+                          child: FlatButton(
+                              color: Color(0xffe5e5e7),
+                              splashColor: Colors.transparent,
+                              onPressed: () {
+                                globals.updateSettings("listenTrigger", "true");
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        new CupertinoAlertDialog(
+                                          title: new Text("Listening..."),
+                                          content: CupertinoActivityIndicator(
+                                            animating: true,
+                                          ),
+                                        ));
+                                new Future.delayed(Duration(seconds: 15), () {
+                                  Navigator.pop(context);
                                 });
-                                globals.updateSettings(
-                                    "brightness", newv.round().toString());
                               },
-                              min: brightnessMin,
-                              max: brightnessMax),
+                              child: Text(
+                                "Listen Now",
+                                style: buttonStyle,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6.0))),
                         )
-                      ]),
-                      Row(
-                        children: <Widget>[
-                          Text(
-                            "Mode",
-                            style: headerStyle,
-                          )
-                        ],
-                      ),
-                      Container(
-                          margin: EdgeInsets.only(bottom: 25),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              Expanded(
-                                  child: CupertinoSlidingSegmentedControl(
-                                children: modeSegments,
-                                onValueChanged: (int newValue) {
-                                  setState(() {
-                                    modeIndex = newValue;
-                                  });
-                                },
-                                groupValue: modeIndex,
-                              ))
-                            ],
-                          )),
-                      // Spacer(),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: FlatButton(
-                                color: Color(0xffe5e5e7),
-                                splashColor: Colors.transparent,
-                                onPressed: () => {},
-                                child: Text(
-                                  "Sleep Now",
-                                  style: buttonStyle,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6.0))),
-                          )
-                        ],
-                      ),
+                      ],
+                    ),
+                  ]);
+                }
+                return Column(children: [
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: FlatButton(
+                            color: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            onPressed: () => {},
+                            child: Text(
+                              "",
+                              style: buttonStyle,
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6.0))),
+                      )
                     ],
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  ))),
+                  ),
+                ]);
+                // your code here
+              }()),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: FlatButton(
+                        color: Color(0xffe5e5e7),
+                        splashColor: Colors.transparent,
+                        onPressed: () => {},
+                        child: Text(
+                          "Sleep Now",
+                          style: buttonStyle,
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6.0))),
+                  )
+                ],
+              ),
+            ],
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          ))),
         ],
       );
     });
