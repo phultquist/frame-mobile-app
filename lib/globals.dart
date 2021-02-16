@@ -4,7 +4,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:convert';
 
 final WebSocketChannel channel =
-    IOWebSocketChannel.connect('ws://192.168.68.102:8000');
+    IOWebSocketChannel.connect('ws://192.168.68.134:8000');
 Map<String, dynamic> data;
 
 void updateSettings(String field, String value) {
