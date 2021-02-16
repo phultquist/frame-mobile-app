@@ -7,4 +7,4 @@ A mobile app made with flutter for Frame.
 `flutter run ios` should do it.
 
 ### About the App
-This is a Cupertino App. I'll make it work for android soon.
+This is a Cupertino App, but it uses `Roboto` as the font, so there shouldn't be an issue with licensing. Thus, this app should run well on both iOS and Android.
