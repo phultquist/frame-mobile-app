@@ -25,6 +25,28 @@ final Map<int, Widget> danceStyleSegments = const <int, Widget>{
   2: Text("Rap", style: buttonStyle)
 };
 
+String danceStyleIndexToId(int index) {
+  String id;
+  switch (index) {
+    case 0:
+      {
+        id = "gif:egypt";
+      }
+      break;
+    case 1:
+      {
+        id = "gif:brick";
+      }
+      break;
+    case 2:
+      {
+        id = "gif:rap";
+      }
+      break;
+  }
+  return id;
+}
+
 class ClockPage extends StatelessWidget {
   Widget build(BuildContext buildContext) {
     return new Scaffold(
@@ -54,18 +76,20 @@ StatefulBuilder buildContent() {
       }
     } else if (idleMode.startsWith("gif")) {
       idleModeIndex = 3;
-      switch (idleMode.split(":")[1]) {
-        case "brick":
-          {
-            danceStyleIndex = 1;
-          }
-          break;
-        case "rap":
-          {
-            danceStyleIndex = 2;
-          }
-          break;
-      }
+      try {
+        switch (idleMode.split(":")[1]) {
+          case "brick":
+            {
+              danceStyleIndex = 1;
+            }
+            break;
+          case "rap":
+            {
+              danceStyleIndex = 2;
+            }
+            break;
+        }
+      } catch (e) {}
     }
   }
 
@@ -109,7 +133,10 @@ StatefulBuilder buildContent() {
                               break;
                             case 3:
                               {
-                                globals.updateSettings("idleMode", "gif");
+                                globals.updateSettings(
+                                    "idleMode",
+                                    "gif:" +
+                                        danceStyleIndexToId(danceStyleIndex));
                               }
                               break;
                           }
@@ -177,24 +204,8 @@ StatefulBuilder buildContent() {
                                   setState(() {
                                     danceStyleIndex = newValue;
                                   });
-                                  String idleModeSettingText = "false";
-                                  switch (newValue) {
-                                    case 0:
-                                      {
-                                        idleModeSettingText = "gif:egypt";
-                                      }
-                                      break;
-                                    case 1:
-                                      {
-                                        idleModeSettingText = "gif:brick";
-                                      }
-                                      break;
-                                    case 2:
-                                      {
-                                        idleModeSettingText = "gif:rap";
-                                      }
-                                      break;
-                                  }
+                                  String idleModeSettingText =
+                                      danceStyleIndexToId(newValue);
                                   globals.updateSettings(
                                       "idleMode", idleModeSettingText);
                                 },

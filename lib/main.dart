@@ -276,7 +276,6 @@ class HomePage extends StatelessWidget {
                             ],
                           ),
                         ]);
-                        // your code here
                       }()),
                       Row(
                         children: <Widget>[
